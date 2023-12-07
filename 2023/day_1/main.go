@@ -7,22 +7,14 @@ import (
 	"strconv"
 )
 
-func main() {
-	f, err := os.Open("input.txt")
-	if err != nil {
-		fmt.Printf("Fail to open input.txt: %s\n", err)
-		os.Exit(1)
-	}
-	defer f.Close()
+func solve_part1(scanner *bufio.Scanner) int {
+	var sum int
 
-	var sum int64
-
-	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		var a, b string
 
 		for _, s := range scanner.Text() {
-			_, err := strconv.ParseInt(string(s), 10, 64)
+			_, err := strconv.Atoi(string(s))
 			if err != nil {
 				continue
 			}
@@ -39,7 +31,7 @@ func main() {
 			b = a
 		}
 
-		x, err := strconv.ParseInt(a+b, 10, 32)
+		x, err := strconv.Atoi(a + b)
 		if err != nil {
 			fmt.Printf("Error parsing %s: %s\n", a+b, err)
 			os.Exit(1)
@@ -48,5 +40,22 @@ func main() {
 		sum += x
 	}
 
-	fmt.Println(sum)
+	return sum
+}
+
+func main() {
+	files := []string{"sample_part_1.txt", "input_part_1.txt"}
+	for _, file := range files {
+		f, err := os.Open(file)
+		if err != nil {
+			fmt.Printf("Fail to open input.txt: %s\n", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+
+		scanner := bufio.NewScanner(f)
+		result := solve_part1(scanner)
+
+		fmt.Println("=", result)
+	}
 }
